@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Spektra Install Italy – Generatore Offerte v3.5 (Tarvisio Edition)</title>
+    <style>
+        /* Ponechaný váš vizuálny štýl, upravené farby na profesionálnu technickú červenú */
+        :root {
+            --primary: #D60000;
+            --primary-dark: #a50000;
+            --gray-100: #F3F4F6;
+            --gray-900: #111827;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        /* ... (zvyšok vašich CSS štýlov zostáva nezmenený pre zachovanie dizajnu) ... */
+        body { font-family: 'Roboto', sans-serif; background-color: var(--gray-100); margin: 0; }
+        .app-container { display: grid; grid-template-columns: 420px 1fr; gap: 24px; max-width: 1400px; margin: 0 auto; padding: 24px; }
+        .controls { background: white; padding: 20px; border-radius: 16px; box-shadow: var(--shadow); height: calc(100vh - 48px); overflow-y: auto; }
+        .preview-container { background: #e2e8f0; padding: 20px; display: flex; justify-content: center; }
+        .a4-page { width: 210mm; min-height: 297mm; background: white; padding: 15mm; box-sizing: border-box; display: flex; flex-direction: column; }
+        .header { border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; }
+        .logo-placeholder { font-size: 24px; font-weight: 900; color: var(--primary); }
+        .pricing-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .pricing-table th { background: var(--gray-100); padding: 8px; text-align: left; border-bottom: 2px solid #ddd; }
+        .pricing-table td { padding: 8px; border-bottom: 1px solid #eee; }
+        .num { text-align: right; }
+        .subsidy-box { border: 1px dashed var(--primary); padding: 10px; background: #fffafa; margin-top: 15px; }
+        @media print { .controls { display: none; } .preview-container { padding: 0; } }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <section class="controls">
+        <h2>Configurazione Offerta (Italia)</h2>
+        <div class="form-row">
+            <div class="form-group"><label>Nr. Offerta</label><input type="text" id="inp-no" value="OF-2026-TR01"></div>
+            <div class="form-group"><label>Data</label><input type="date" id="inp-date"></div>
+        </div>
+        <div class="form-group"><label>Cliente</label><input type="text" id="inp-name" placeholder="Nome Cognome"></div>
+        <div class="form-group"><label>Indirizzo Cantiere (Tarvisio)</label><textarea id="inp-addr" rows="2"></textarea></div>
+
+        <hr>
+
+        <div class="form-group">
+            <label>Sistema Scelto (Split High-Performance)</label>
+            <select id="inp-model">
+                <optgroup label="Mitsubishi Zubadan (Ideale per Tarvisio)">
+                    <option value="zuba_8_it">Mitsubishi Zubadan 8kW Split + AiO 200L</option>
+                    <option value="zuba_12_it">Mitsubishi Zubadan 12kW Split + AiO 200L</option>
+                </optgroup>
+                <optgroup label="Panasonic Aquarea T-CAP (Zona F)">
+                    <option value="pana_tcap_9_it">Panasonic T-CAP 9kW Split + AiO 185L</option>
+                    <option value="pana_tcap_12_it">Panasonic T-CAP 12kW Split + AiO 185L</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Detrazione Fiscale (Bonus)</label>
+                <select id="inp-voucher">
+                    <option value="0.65">Ecobonus 65% (Detrazione)</option>
+                    <option value="0.50">Bonus Casa 50%</option>
+                    <option value="conto_termico">Conto Termico 2.0 (Rimborso)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>IVA (%)</label>
+                <select id="inp-vat">
+                    <option value="10" selected>10 % (Ristrutturazione)</option>
+                    <option value="22">22 % (Standard)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-primary" onclick="window.print()">🖨️ Stampa / PDF</button>
+            <button class="btn-secondary" onclick="saveLocal()">💾 Salva</button>
+        </div>
+    </section>
+
+    <section class="preview-container">
+        <div class="a4-page" id="document">
+            <div class="header">
+                <div>
+                    <div class="logo-placeholder">SPEKTRA <span>INSTALL IT</span></div>
+                    <div style="font-size:10px;">Soluzioni Termiche d'Alta Quota</div>
+                </div>
+                <div style="text-align:right;">
+                    <h2 style="margin:0; font-size:18px;">PREVENTIVO</h2>
+                    <div style="font-size:11px;">Nr: <span id="out-no"></span></div>
+                    <div style="font-size:11px;">Data: <span id="out-date"></span></div>
+                </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-bottom:20px; font-size:11px;">
+                <div>
+                    <strong style="text-transform:uppercase; color:#666;">Fornitore:</strong><br>
+                    <strong>Spektra Install S.r.l.</strong><br>
+                    Sede operativa: Tarvisio / Rajec<br>
+                    P.IVA: SK53690036 (Intracom)
+                </div>
+                <div>
+                    <strong style="text-transform:uppercase; color:#666;">Destinatario:</strong><br>
+                    <span id="out-name" style="font-weight:bold;"></span><br>
+                    <span id="out-addr"></span>
+                </div>
+            </div>
+
+            <div style="font-size:12px; margin-bottom:15px;">
+                Gentile Cliente, in base al sopralluogo effettuato a <strong>Tarvisio</strong>, proponiamo l'installazione di un sistema a pompa di calore professionale tipo <strong>Split</strong>, specifico per climi rigidi:
+            </div>
+
+            <table class="pricing-table">
+                <thead>
+                    <tr>
+                        <th>Descrizione</th>
+                        <th class="num">Prezzo (IVA escl.)</th>
+                        <th class="num">IVA</th>
+                        <th class="num">Totale</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+            </table>
+
+            <div style="margin-left:auto; width:250px; margin-top:15px;">
+                <div style="display:flex; justify-content:space-between; font-size:11px; padding:2px 0;">
+                    <span>Imponibile:</span> <span id="t-net"></span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:11px; padding:2px 0;">
+                    <span>IVA:</span> <span id="t-vat"></span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:bold; color:var(--primary); border-top:2px solid #000; padding-top:5px; margin-top:5px;">
+                    <span>TOTALE:</span> <span id="t-grand"></span>
+                </div>
+            </div>
+
+            <div class="subsidy-box" id="sub-box">
+                <h4 style="margin:0; font-size:12px;">Incentivi Fiscali Previsti (Zona F)</h4>
+                <p style="font-size:10px; margin:5px 0;">Questo impianto accede agli incentivi statali. L'importo stimato del recupero è:</p>
+                <div style="display:flex; justify-content:space-between; font-weight:bold; color:var(--primary);">
+                    <span>Recupero stimato:</span> <span id="sub-val"></span>
+                </div>
+            </div>
+
+            <div style="margin-top:auto; font-size:9px; color:#555; border-top:1px solid #ddd; padding-top:10px;">
+                <strong>Note Tecniche:</strong><br>
+                1. Sistema Split: Il collegamento tra unità esterna ed interna avviene tramite tubazioni frigorifere (senza acqua all'esterno) per prevenire il congelamento.<br>
+                2. Installazione: Include montaggio su staffe certificate, collegamento idraulico ai radiatori esistenti e collaudo.<br>
+                3. Garanzia: 5 anni sul compressore Mitsubishi/Panasonic.
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    const PRICES = {
+        'zuba_8_it': { name: 'Mitsubishi Zubadan 8kW Split + Tower 200L', price: 11800 },
+        'zuba_12_it': { name: 'Mitsubishi Zubadan 12kW Split + Tower 200L', price: 13500 },
+        'pana_tcap_9_it': { name: 'Panasonic T-CAP 9kW Split + AiO 185L', price: 10500 },
+        'pana_tcap_12_it': { name: 'Panasonic T-CAP 12kW Split + AiO 185L', price: 12200 }
+    };
+
+    const INSTALLATION_COST = 2800; // Cena montáže a materiálu v IT
+
+    function render() {
+        const modelKey = document.getElementById('inp-model').value;
+        const modelData = PRICES[modelKey];
+        const vatRate = parseFloat(document.getElementById('inp-vat').value) / 100;
+        const bonusRate = document.getElementById('inp-voucher').value;
+
+        document.getElementById('out-no').textContent = document.getElementById('inp-no').value;
+        document.getElementById('out-date').textContent = document.getElementById('inp-date').value;
+        document.getElementById('out-name').textContent = document.getElementById('inp-name').value;
+        document.getElementById('out-addr').textContent = document.getElementById('inp-addr').value;
+
+        let tableHtml = `
+            <tr><td>Sistema Pompa di Calore ${modelData.name}</td><td class="num">€ ${modelData.price.toFixed(2)}</td><td class="num">${(modelData.price * vatRate).toFixed(2)}</td><td class="num">${(modelData.price * (1+vatRate)).toFixed(2)}</td></tr>
+            <tr><td>Installazione, tubazioni frigorifere isolanti e collaudo</td><td class="num">€ ${INSTALLATION_COST.toFixed(2)}</td><td class="num">${(INSTALLATION_COST * vatRate).toFixed(2)}</td><td class="num">${(INSTALLATION_COST * (1+vatRate)).toFixed(2)}</td></tr>
+        `;
+        document.getElementById('table-body').innerHTML = tableHtml;
+
+        const totalNet = modelData.price + INSTALLATION_COST;
+        const totalVat = totalNet * vatRate;
+        const totalGrand = totalNet + totalVat;
+
+        document.getElementById('t-net').textContent = '€ ' + totalNet.toLocaleString();
+        document.getElementById('t-vat').textContent = '€ ' + totalVat.toLocaleString();
+        document.getElementById('t-grand').textContent = '€ ' + totalGrand.toLocaleString();
+
+        // Výpočet bonusu
+        let bonusCalc = 0;
+        if(bonusRate === "conto_termico") bonusCalc = 4500; // Odhad pre Tarvisio zóna F
+        else bonusCalc = totalGrand * parseFloat(bonusRate);
+        
+        document.getElementById('sub-val').textContent = '€ ' + bonusCalc.toLocaleString();
+    }
+
+    document.querySelectorAll('input, select, textarea').forEach(el => el.addEventListener('input', render));
+    render();
+</script>
+</body>
+</html>
