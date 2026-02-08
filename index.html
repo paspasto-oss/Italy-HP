@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spektra Install – Cenová ponuka Tarvisio</title>
+    <title>Spektra Install – Cenová ponuka</title>
     
     <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23D60000'/%3E%3Ctext x='32' y='47' fill='white' font-family='sans-serif' font-weight='900' font-size='44' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -19,7 +19,6 @@
 
         body { background-color: #cbd5e1; font-family: 'Roboto', sans-serif; margin: 0; padding: 0; color: var(--gray-900); }
 
-        /* APLIKÁCIA */
         .app-container { display: grid; grid-template-columns: 380px 1fr; gap: 15px; max-width: 1500px; margin: 0 auto; padding: 15px; height: 100vh; box-sizing: border-box; }
 
         .controls { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
@@ -30,7 +29,6 @@
 
         .btn-primary { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 700; cursor: pointer; }
 
-        /* A4 PREVIEW */
         .preview-container { display: flex; justify-content: center; padding: 10px; overflow-y: auto; }
         
         .a4-page {
@@ -65,7 +63,6 @@
         
         .notes-section { margin-top: 8px; font-size: 9px; color: #444; line-height: 1.4; }
 
-        /* PÄTA S PODPISOM */
         .footer-signature {
             margin-top: auto;
             display: flex;
@@ -90,17 +87,17 @@
 
 <div class="app-container">
     <section class="controls">
-        <h2>Nastavenia Ponuky (Tarvisio)</h2>
+        <h2>Nastavenia Ponuky</h2>
         <div class="form-row">
             <div class="form-group"><label>Číslo ponuky</label><input type="text" id="inp-no" value="CP-2026-001"></div>
             <div class="form-group"><label>Dátum</label><input type="date" id="inp-date"></div>
         </div>
         <div class="form-group"><label>Zákazník</label><input type="text" id="inp-name" placeholder="Meno a priezvisko"></div>
-        <div class="form-group"><label>Adresa realizácie</label><input type="text" id="inp-addr" placeholder="Ulica, Tarvisio"></div>
+        <div class="form-group"><label>Miesto realizácie</label><input type="text" id="inp-addr" placeholder="Tarvisio, Taliansko"></div>
 
         <hr style="border:0; border-top:1px solid #eee;">
         <div class="form-group">
-            <label>Model Zubadan / T-CAP</label>
+            <label>Model TČ</label>
             <select id="inp-model">
                 <option value="zuba8">Mitsubishi Zubadan 8kW Split + AiO 200L</option>
                 <option value="zuba12">Mitsubishi Zubadan 12kW Split + AiO 200L</option>
@@ -114,11 +111,17 @@
         </div>
         <div class="form-group"><label>30m Potrubie REHAU (€)</label><input type="number" id="inp-rehau" value="2100"></div>
         <div class="form-row">
-            <div class="form-group"><label>Doprava Tarvisio (€)</label><input type="number" id="inp-ship" value="450"></div>
-            <div class="form-group"><label>DPH (%)</label><select id="inp-vat"><option value="10">10%</option><option value="22">22%</option></select></div>
+            <div class="form-group"><label>Doprava (€)</label><input type="number" id="inp-ship" value="450"></div>
+            <div class="form-group">
+                <label>Sadzba DPH (%)</label>
+                <select id="inp-vat">
+                    <option value="23" selected>23 % (SK standard)</option>
+                    <option value="10">10 % (IT rekonštrukcia)</option>
+                </select>
+            </div>
         </div>
         <div class="form-group">
-            <label>Zobraziť Dotáciu (Ecobonus)?</label>
+            <label>Zobraziť dotáciu?</label>
             <select id="inp-show-sub"><option value="ano">Áno (65%)</option><option value="nie">Nie</option></select>
         </div>
         <button class="btn-primary" onclick="window.print()">🖨️ GENEROVAŤ PONUKU (PDF)</button>
@@ -145,8 +148,6 @@
                 </div>
             </div>
 
-            <p style="font-size:10px; margin-bottom:5px;">Predmet: Dodávka a montáž tepelného čerpadla v prevedení <strong>SPLIT</strong> pre horskú oblasť Tarvisio.</p>
-
             <table class="pricing-table">
                 <thead>
                     <tr>
@@ -165,26 +166,26 @@
             </div>
 
             <div id="sub-box" class="subsidy-box">
-                <h4 style="margin:0; font-size:11px; color:var(--primary);">MOŽNOSŤ ODPÍSANIA Z DANÍ (Ecobonus 65% v IT)</h4>
+                <h4 style="margin:0; font-size:11px; color:var(--primary);">ODHAD MOŽNÉHO ODPÍSANIA Z DANÍ (Ecobonus IT)</h4>
                 <div style="display:flex; justify-content:space-between; font-weight:700; font-size:11px; margin-top:2px;">
-                    <span>Odhadovaná výška úspory:</span> <span id="sub-val" style="color:var(--primary);"></span>
+                    <span>Výška finančnej úspory (65%):</span> <span id="sub-val" style="color:var(--primary);"></span>
                 </div>
             </div>
 
             <div class="notes-section">
                 <strong>TECHNICKÉ POZNÁMKY:</strong><br>
-                • <strong>Systém Split:</strong> Prepojenie chladivom medzi vonkajšou a vnútornou jednotkou (voda nemrzne vonku).<br>
-                • <strong>Potrubie REHAU:</strong> Použitie 30m predizolovaného potrubia pre minimalizáciu strát medzi prístavbou a poschodiami.<br>
-                • <strong>V cene:</strong> Odborná montáž, vákuovanie, spustenie, certifikácia a záruka 5 rokov na kompresor.
+                • <strong>Systém Split:</strong> Bezpečné riešenie pre horské oblasti (Tarvisio), chladivo namiesto vody vo vonkajšom prostredí.<br>
+                • <strong>Potrubie REHAU:</strong> Použitie 30m predizolovaného vedenia pre maximálnu účinnosť medzi prístavbou a budovou.<br>
+                • <strong>V cene:</strong> Inštalácia, vákuovanie, odborné spustenie, certifikácia a 5-ročná záruka na kompresor.
             </div>
 
             <div class="footer-signature">
                 <div class="sig-box">
-                    Spektra Install s. r. o.<br>Profesionálne vykurovanie
+                    Spektra Install s. r. o.<br>Vystavil: Pavol Pastorek
                 </div>
                 <div class="sig-box">
                     <div class="sig-line"></div>
-                    Podpis a pečiatka (akceptácia)
+                    Podpis a pečiatka
                 </div>
             </div>
         </div>
@@ -214,10 +215,10 @@
 
         const items = [
             { n: model.name, p: model.price },
-            { n: 'Inštalačný materiál (medené rozvody chladiva, izolácie, konzoly)', p: mat },
-            { n: 'Predizolované potrubie REHAU (30m vetva prístavba-poschodia)', p: rehau },
-            { n: 'Odborná montáž, hydraulické zapojenie a spustenie (IT)', p: work },
-            { n: 'Doprava techniky a logistika (Tarvisio, Taliansko)', p: ship }
+            { n: 'Inštalačný materiál (medené rozvody, izolácie, konzoly)', p: mat },
+            { n: 'Predizolované potrubie REHAU (30m vetva prístavba-budova)', p: rehau },
+            { n: 'Odborná montáž, hydraulické zapojenie a spustenie', p: work },
+            { n: 'Doprava a logistika (Tarvisio, IT)', p: ship }
         ];
 
         let html = ''; let sumNet = 0;
